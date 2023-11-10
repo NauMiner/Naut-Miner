@@ -60,7 +60,7 @@ contract InvitationCenter is Ownable {
         }
 
         _registeredAccount.add(registerApplier);
-        bytes32 selfInvitationCode = _generateInvitationCode(registerApplier);
+        bytes32 selfInvitationCode = generateInvitationCode(registerApplier);
         _registeredInvitationCode.add(selfInvitationCode);
         _inviterCodeToAddress[selfInvitationCode] = registerApplier;
 
@@ -78,7 +78,7 @@ contract InvitationCenter is Ownable {
         return _registeredAccount.contains(who);
     }
 
-    function _generateInvitationCode(address requester) internal view returns (bytes32) {
+    function generateInvitationCode(address requester) public view returns (bytes32) {
         bytes32 invitationCode = _calcInvitationCode(uint256(keccak256(abi.encodePacked(requester))));
 
         while (_registeredInvitationCode.contains(invitationCode) || invitationCode == ZERO_BYTES) {
