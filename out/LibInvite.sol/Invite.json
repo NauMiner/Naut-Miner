@@ -1,0 +1,486 @@
+{
+  "abi": [],
+  "bytecode": {
+    "object": "0x6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea26469706673582212201abb554a544f75fbc36f733a262f4129391a1be39b8d6b5661dd34713459c96d64736f6c63430008150033",
+    "sourceMap": "141:536:1:-:0;;;;;;;;;;;;;;;;;;;",
+    "linkReferences": {}
+  },
+  "deployedBytecode": {
+    "object": "0x6080604052600080fdfea26469706673582212201abb554a544f75fbc36f733a262f4129391a1be39b8d6b5661dd34713459c96d64736f6c63430008150033",
+    "sourceMap": "141:536:1:-:0;;;;;",
+    "linkReferences": {}
+  },
+  "methodIdentifiers": {},
+  "rawMetadata": "{\"compiler\":{\"version\":\"0.8.21+commit.d9974bed\"},\"language\":\"Solidity\",\"output\":{\"abi\":[],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"src/LibInvite.sol\":\"Invite\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[\":@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/\",\":ds-test/=lib/forge-std/lib/ds-test/src/\",\":erc4626-tests/=lib/openzeppelin-contracts/lib/erc4626-tests/\",\":forge-std/=lib/forge-std/src/\",\":openzeppelin-contracts/=lib/openzeppelin-contracts/\"]},\"sources\":{\"lib/openzeppelin-contracts/contracts/utils/structs/EnumerableSet.sol\":{\"keccak256\":\"0x86c1470cbfd878491e5de030072b647352d36bd27122cffb928970b1945282aa\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://ad85dd393ee0a1917c57046abc5155f51f77844b2c6a42c05c1b8dd26d6ff3c1\",\"dweb:/ipfs/QmNqYc8To2NdnpP6E1tGz7t6A7beuENde5yovwov5pW1fA\"]},\"src/LibInvite.sol\":{\"keccak256\":\"0x15d43fd016bb2094514f134be8d004c64cc5a60df3081fed6b315bf73a96f6c7\",\"license\":\"MIT\",\"urls\":[\"bzz-raw://3bd6e1cd96643400098addd4b4ee5efdc9e49528e18bd5b43eb80e5fdfb0a673\",\"dweb:/ipfs/QmWqiLKBTxppUhYwqtZpqp34aKGCXGcqT9z6AcLk6kQ5QR\"]}},\"version\":1}",
+  "metadata": {
+    "compiler": {
+      "version": "0.8.21+commit.d9974bed"
+    },
+    "language": "Solidity",
+    "output": {
+      "abi": [],
+      "devdoc": {
+        "kind": "dev",
+        "methods": {},
+        "version": 1
+      },
+      "userdoc": {
+        "kind": "user",
+        "methods": {},
+        "version": 1
+      }
+    },
+    "settings": {
+      "remappings": [
+        "@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
+        "ds-test/=lib/forge-std/lib/ds-test/src/",
+        "erc4626-tests/=lib/openzeppelin-contracts/lib/erc4626-tests/",
+        "forge-std/=lib/forge-std/src/",
+        "openzeppelin-contracts/=lib/openzeppelin-contracts/"
+      ],
+      "optimizer": {
+        "enabled": true,
+        "runs": 200
+      },
+      "metadata": {
+        "bytecodeHash": "ipfs"
+      },
+      "compilationTarget": {
+        "src/LibInvite.sol": "Invite"
+      },
+      "libraries": {}
+    },
+    "sources": {
+      "lib/openzeppelin-contracts/contracts/utils/structs/EnumerableSet.sol": {
+        "keccak256": "0x86c1470cbfd878491e5de030072b647352d36bd27122cffb928970b1945282aa",
+        "urls": [
+          "bzz-raw://ad85dd393ee0a1917c57046abc5155f51f77844b2c6a42c05c1b8dd26d6ff3c1",
+          "dweb:/ipfs/QmNqYc8To2NdnpP6E1tGz7t6A7beuENde5yovwov5pW1fA"
+        ],
+        "license": "MIT"
+      },
+      "src/LibInvite.sol": {
+        "keccak256": "0x15d43fd016bb2094514f134be8d004c64cc5a60df3081fed6b315bf73a96f6c7",
+        "urls": [
+          "bzz-raw://3bd6e1cd96643400098addd4b4ee5efdc9e49528e18bd5b43eb80e5fdfb0a673",
+          "dweb:/ipfs/QmWqiLKBTxppUhYwqtZpqp34aKGCXGcqT9z6AcLk6kQ5QR"
+        ],
+        "license": "MIT"
+      }
+    },
+    "version": 1
+  },
+  "ast": {
+    "absolutePath": "src/LibInvite.sol",
+    "id": 644,
+    "exportedSymbols": {
+      "EnumerableSet": [
+        612
+      ],
+      "Invite": [
+        643
+      ]
+    },
+    "nodeType": "SourceUnit",
+    "src": "32:646:1",
+    "nodes": [
+      {
+        "id": 614,
+        "nodeType": "PragmaDirective",
+        "src": "32:24:1",
+        "nodes": [],
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".13"
+        ]
+      },
+      {
+        "id": 615,
+        "nodeType": "ImportDirective",
+        "src": "58:81:1",
+        "nodes": [],
+        "absolutePath": "lib/openzeppelin-contracts/contracts/utils/structs/EnumerableSet.sol",
+        "file": "../lib/openzeppelin-contracts/contracts/utils/structs/EnumerableSet.sol",
+        "nameLocation": "-1:-1:-1",
+        "scope": 644,
+        "sourceUnit": 613,
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "id": 643,
+        "nodeType": "ContractDefinition",
+        "src": "141:536:1",
+        "nodes": [
+          {
+            "id": 622,
+            "nodeType": "StructDefinition",
+            "src": "163:136:1",
+            "nodes": [],
+            "canonicalName": "Invite.Record",
+            "members": [
+              {
+                "constant": false,
+                "id": 617,
+                "mutability": "mutable",
+                "name": "who",
+                "nameLocation": "195:3:1",
+                "nodeType": "VariableDeclaration",
+                "scope": 622,
+                "src": "187:11:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 616,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "187:7:1",
+                  "stateMutability": "nonpayable",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 619,
+                "mutability": "mutable",
+                "name": "inviter",
+                "nameLocation": "216:7:1",
+                "nodeType": "VariableDeclaration",
+                "scope": 622,
+                "src": "208:15:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                },
+                "typeName": {
+                  "id": 618,
+                  "name": "address",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "208:7:1",
+                  "stateMutability": "nonpayable",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  }
+                },
+                "visibility": "internal"
+              },
+              {
+                "constant": false,
+                "id": 621,
+                "mutability": "mutable",
+                "name": "invitationCode",
+                "nameLocation": "278:14:1",
+                "nodeType": "VariableDeclaration",
+                "scope": 622,
+                "src": "270:22:1",
+                "stateVariable": false,
+                "storageLocation": "default",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_bytes32",
+                  "typeString": "bytes32"
+                },
+                "typeName": {
+                  "id": 620,
+                  "name": "bytes32",
+                  "nodeType": "ElementaryTypeName",
+                  "src": "270:7:1",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_bytes32",
+                    "typeString": "bytes32"
+                  }
+                },
+                "visibility": "internal"
+              }
+            ],
+            "name": "Record",
+            "nameLocation": "170:6:1",
+            "scope": 643,
+            "visibility": "public"
+          },
+          {
+            "id": 625,
+            "nodeType": "VariableDeclaration",
+            "src": "305:52:1",
+            "nodes": [],
+            "constant": false,
+            "mutability": "mutable",
+            "name": "_registeredAccount",
+            "nameLocation": "339:18:1",
+            "scope": 643,
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_struct$_AddressSet_$325_storage",
+              "typeString": "struct EnumerableSet.AddressSet"
+            },
+            "typeName": {
+              "id": 624,
+              "nodeType": "UserDefinedTypeName",
+              "pathNode": {
+                "id": 623,
+                "name": "EnumerableSet.AddressSet",
+                "nameLocations": [
+                  "305:13:1",
+                  "319:10:1"
+                ],
+                "nodeType": "IdentifierPath",
+                "referencedDeclaration": 325,
+                "src": "305:24:1"
+              },
+              "referencedDeclaration": 325,
+              "src": "305:24:1",
+              "typeDescriptions": {
+                "typeIdentifier": "t_struct$_AddressSet_$325_storage_ptr",
+                "typeString": "struct EnumerableSet.AddressSet"
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "id": 630,
+            "nodeType": "VariableDeclaration",
+            "src": "384:51:1",
+            "nodes": [],
+            "constant": false,
+            "mutability": "mutable",
+            "name": "_inviterRecords",
+            "nameLocation": "420:15:1",
+            "scope": 643,
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Record_$622_storage_$",
+              "typeString": "mapping(address => struct Invite.Record)"
+            },
+            "typeName": {
+              "id": 629,
+              "keyName": "",
+              "keyNameLocation": "-1:-1:-1",
+              "keyType": {
+                "id": 626,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "392:7:1",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "384:26:1",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_address_$_t_struct$_Record_$622_storage_$",
+                "typeString": "mapping(address => struct Invite.Record)"
+              },
+              "valueName": "",
+              "valueNameLocation": "-1:-1:-1",
+              "valueType": {
+                "id": 628,
+                "nodeType": "UserDefinedTypeName",
+                "pathNode": {
+                  "id": 627,
+                  "name": "Record",
+                  "nameLocations": [
+                    "403:6:1"
+                  ],
+                  "nodeType": "IdentifierPath",
+                  "referencedDeclaration": 622,
+                  "src": "403:6:1"
+                },
+                "referencedDeclaration": 622,
+                "src": "403:6:1",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_Record_$622_storage_ptr",
+                  "typeString": "struct Invite.Record"
+                }
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "id": 635,
+            "nodeType": "VariableDeclaration",
+            "src": "475:69:1",
+            "nodes": [],
+            "constant": false,
+            "mutability": "mutable",
+            "name": "_inviteeRecords",
+            "nameLocation": "529:15:1",
+            "scope": 643,
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_address_$_t_struct$_AddressSet_$325_storage_$",
+              "typeString": "mapping(address => struct EnumerableSet.AddressSet)"
+            },
+            "typeName": {
+              "id": 634,
+              "keyName": "",
+              "keyNameLocation": "-1:-1:-1",
+              "keyType": {
+                "id": 631,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "483:7:1",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "475:44:1",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_address_$_t_struct$_AddressSet_$325_storage_$",
+                "typeString": "mapping(address => struct EnumerableSet.AddressSet)"
+              },
+              "valueName": "",
+              "valueNameLocation": "-1:-1:-1",
+              "valueType": {
+                "id": 633,
+                "nodeType": "UserDefinedTypeName",
+                "pathNode": {
+                  "id": 632,
+                  "name": "EnumerableSet.AddressSet",
+                  "nameLocations": [
+                    "494:13:1",
+                    "508:10:1"
+                  ],
+                  "nodeType": "IdentifierPath",
+                  "referencedDeclaration": 325,
+                  "src": "494:24:1"
+                },
+                "referencedDeclaration": 325,
+                "src": "494:24:1",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_struct$_AddressSet_$325_storage_ptr",
+                  "typeString": "struct EnumerableSet.AddressSet"
+                }
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "id": 638,
+            "nodeType": "VariableDeclaration",
+            "src": "551:59:1",
+            "nodes": [],
+            "constant": false,
+            "mutability": "mutable",
+            "name": "_registeredInvitationCode",
+            "nameLocation": "585:25:1",
+            "scope": 643,
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_struct$_Bytes32Set_$204_storage",
+              "typeString": "struct EnumerableSet.Bytes32Set"
+            },
+            "typeName": {
+              "id": 637,
+              "nodeType": "UserDefinedTypeName",
+              "pathNode": {
+                "id": 636,
+                "name": "EnumerableSet.Bytes32Set",
+                "nameLocations": [
+                  "551:13:1",
+                  "565:10:1"
+                ],
+                "nodeType": "IdentifierPath",
+                "referencedDeclaration": 204,
+                "src": "551:24:1"
+              },
+              "referencedDeclaration": 204,
+              "src": "551:24:1",
+              "typeDescriptions": {
+                "typeIdentifier": "t_struct$_Bytes32Set_$204_storage_ptr",
+                "typeString": "struct EnumerableSet.Bytes32Set"
+              }
+            },
+            "visibility": "internal"
+          },
+          {
+            "id": 642,
+            "nodeType": "VariableDeclaration",
+            "src": "616:58:1",
+            "nodes": [],
+            "constant": false,
+            "mutability": "mutable",
+            "name": "_inviterCodeToAddress",
+            "nameLocation": "653:21:1",
+            "scope": 643,
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_mapping$_t_bytes32_$_t_address_$",
+              "typeString": "mapping(bytes32 => address)"
+            },
+            "typeName": {
+              "id": 641,
+              "keyName": "",
+              "keyNameLocation": "-1:-1:-1",
+              "keyType": {
+                "id": 639,
+                "name": "bytes32",
+                "nodeType": "ElementaryTypeName",
+                "src": "624:7:1",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_bytes32",
+                  "typeString": "bytes32"
+                }
+              },
+              "nodeType": "Mapping",
+              "src": "616:27:1",
+              "typeDescriptions": {
+                "typeIdentifier": "t_mapping$_t_bytes32_$_t_address_$",
+                "typeString": "mapping(bytes32 => address)"
+              },
+              "valueName": "",
+              "valueNameLocation": "-1:-1:-1",
+              "valueType": {
+                "id": 640,
+                "name": "address",
+                "nodeType": "ElementaryTypeName",
+                "src": "635:7:1",
+                "stateMutability": "nonpayable",
+                "typeDescriptions": {
+                  "typeIdentifier": "t_address",
+                  "typeString": "address"
+                }
+              }
+            },
+            "visibility": "internal"
+          }
+        ],
+        "abstract": false,
+        "baseContracts": [],
+        "canonicalName": "Invite",
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "fullyImplemented": true,
+        "linearizedBaseContracts": [
+          643
+        ],
+        "name": "Invite",
+        "nameLocation": "150:6:1",
+        "scope": 644,
+        "usedErrors": [],
+        "usedEvents": []
+      }
+    ],
+    "license": "MIT"
+  },
+  "id": 1
+}

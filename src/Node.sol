@@ -29,6 +29,8 @@ contract Node is ERC721, Ownable {
         Grill
     }
 
+    event upgradeEvent(uint256 tokenId, EquipmentType equipmentType, EquipmentLevel equipmentLevel, uint256 time);
+
     struct NodeInfo {
         MachaineType machaineType;
         EquipmentType[] equipmentType;
@@ -106,39 +108,39 @@ contract Node is ERC721, Ownable {
         if (_machaineType == MachaineType.Regular) {
             if (_equipmentType == EquipmentType.Pipe) {
                 EquipmentLevel _currentLevel = nodeInfo[tokenId].equipmentLevel[_equipmentType];
-                upgradeLevel(_currentLevel, _equipmentType, _equipmentLevel, 31, 41, 50, 12, 21, 10);
+                upgradeLevel(tokenId, _currentLevel, _equipmentType, _equipmentLevel, 31, 41, 50, 12, 21, 10);
             } else if (_equipmentType == EquipmentType.Gear) {
                 EquipmentLevel _currentLevel = nodeInfo[tokenId].equipmentLevel[_equipmentType];
-                upgradeLevel(_currentLevel, _equipmentType, _equipmentLevel, 68, 91, 110, 27, 49, 22);
+                upgradeLevel(tokenId, _currentLevel, _equipmentType, _equipmentLevel, 68, 91, 110, 27, 49, 22);
             } else if (_equipmentType == EquipmentType.Grill) {
                 EquipmentLevel _currentLevel = nodeInfo[tokenId].equipmentLevel[_equipmentType];
-                upgradeLevel(_currentLevel, _equipmentType, _equipmentLevel, 114, 152, 183, 45, 81, 36);
+                upgradeLevel(tokenId, _currentLevel, _equipmentType, _equipmentLevel, 114, 152, 183, 45, 81, 36);
             }
         } else if (_machaineType == MachaineType.Enhenced) {
             if (_equipmentType == EquipmentType.Pipe) {
                 EquipmentLevel _currentLevel = nodeInfo[tokenId].equipmentLevel[_equipmentType];
-                upgradeLevel(_currentLevel, _equipmentType, _equipmentLevel, 102, 136, 163, 40, 72, 32);
+                upgradeLevel(tokenId, _currentLevel, _equipmentType, _equipmentLevel, 102, 136, 163, 40, 72, 32);
             } else if (_equipmentType == EquipmentType.Gear) {
                 EquipmentLevel _currentLevel = nodeInfo[tokenId].equipmentLevel[_equipmentType];
-                upgradeLevel(_currentLevel, _equipmentType, _equipmentLevel, 225, 300, 360, 90, 162, 72);
+                upgradeLevel(tokenId, _currentLevel, _equipmentType, _equipmentLevel, 225, 300, 360, 90, 162, 72);
             } else if (_equipmentType == EquipmentType.Grill) {
                 EquipmentLevel _currentLevel = nodeInfo[tokenId].equipmentLevel[_equipmentType];
-                upgradeLevel(_currentLevel, _equipmentType, _equipmentLevel, 375, 500, 600, 150, 270, 120);
+                upgradeLevel(tokenId, _currentLevel, _equipmentType, _equipmentLevel, 375, 500, 600, 150, 270, 120);
             }
         } else if (_machaineType == MachaineType.Finest) {
             if (_equipmentType == EquipmentType.Pipe) {
                 EquipmentLevel _currentLevel = nodeInfo[tokenId].equipmentLevel[_equipmentType];
-                upgradeLevel(_currentLevel, _equipmentType, _equipmentLevel, 221, 295, 354, 88, 158, 70);
+                upgradeLevel(tokenId, _currentLevel, _equipmentType, _equipmentLevel, 221, 295, 354, 88, 158, 70);
             } else if (_equipmentType == EquipmentType.Gear) {
                 EquipmentLevel _currentLevel = nodeInfo[tokenId].equipmentLevel[_equipmentType];
-                upgradeLevel(_currentLevel, _equipmentType, _equipmentLevel, 487, 650, 780, 195, 351, 156);
+                upgradeLevel(tokenId, _currentLevel, _equipmentType, _equipmentLevel, 487, 650, 780, 195, 351, 156);
             } else if (_equipmentType == EquipmentType.Grill) {
                 EquipmentLevel _currentLevel = nodeInfo[tokenId].equipmentLevel[_equipmentType];
-                upgradeLevel(_currentLevel, _equipmentType, _equipmentLevel, 812, 1083, 1300, 325, 585, 260);
+                upgradeLevel(tokenId, _currentLevel, _equipmentType, _equipmentLevel, 812, 1083, 1300, 325, 585, 260);
             }
         }
         if (_equipmentType == EquipmentType.Pipe) {
-            if(_equipmentLevel == EquipmentLevel.Gold) {
+            if (_equipmentLevel == EquipmentLevel.Gold) {
                 nodeInfo[tokenId].unlockPeriod -= 60 days;
             } else if (_equipmentLevel == EquipmentLevel.Platinum) {
                 nodeInfo[tokenId].unlockPeriod -= 90 days;
@@ -146,7 +148,7 @@ contract Node is ERC721, Ownable {
                 nodeInfo[tokenId].unlockPeriod -= 120 days;
             }
         } else if (_equipmentType == EquipmentType.Gear) {
-            if(_equipmentLevel == EquipmentLevel.Gold) {
+            if (_equipmentLevel == EquipmentLevel.Gold) {
                 nodeInfo[tokenId].unlockPeriod -= 120 days;
             } else if (_equipmentLevel == EquipmentLevel.Platinum) {
                 nodeInfo[tokenId].unlockPeriod -= 180 days;
@@ -154,7 +156,7 @@ contract Node is ERC721, Ownable {
                 nodeInfo[tokenId].unlockPeriod -= 240 days;
             }
         } else if (_equipmentType == EquipmentType.Grill) {
-            if(_equipmentLevel == EquipmentLevel.Gold) {
+            if (_equipmentLevel == EquipmentLevel.Gold) {
                 nodeInfo[tokenId].unlockPeriod -= 180 days;
             } else if (_equipmentLevel == EquipmentLevel.Platinum) {
                 nodeInfo[tokenId].unlockPeriod -= 270 days;
@@ -162,12 +164,13 @@ contract Node is ERC721, Ownable {
                 nodeInfo[tokenId].unlockPeriod -= 360 days;
             }
         }
+        emit upgradeEvent(tokenId, _equipmentType, _equipmentLevel, block.timestamp);
     }
 
     function upgradeLevel(
         uint256 tokenId,
-        EquipmentType _equipmentType,
         EquipmentLevel _currentLevel,
+        EquipmentType _equipmentType,
         EquipmentLevel _equipmentLevel,
         uint256 _baseToGold,
         uint256 _baseToPlatinum,
