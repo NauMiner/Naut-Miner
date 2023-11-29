@@ -28,9 +28,11 @@ contract Node is ERC721, Ownable {
         Grill
     }
 
-    event upgradeEvent(uint256 tokenId, EquipmentType equipmentType, EquipmentLevel equipmentLevel, uint256 time);
+    event upgradeEvent(
+        uint256 indexed tokenId, EquipmentType equipmentType, EquipmentLevel equipmentLevel, uint256 time
+    );
 
-    event mintEvent(uint256 tokenId, address user, uint256 amount, address inviter, MachaineType _machaineType);
+    event mintEvent(uint256 indexed tokenId, address user, uint256 amount, address inviter, MachaineType _machaineType);
 
     struct NodeInfo {
         MachaineType machaineType;
@@ -41,7 +43,6 @@ contract Node is ERC721, Ownable {
         uint256 totalToken;
     }
 
-    address public oracle;
     bool public transferable;
     uint256 public nextTokenID;
     mapping(uint256 => NodeInfo) public nodeInfo;
@@ -58,13 +59,11 @@ contract Node is ERC721, Ownable {
     constructor(
         string memory name,
         string memory symbol,
-        address _oracle,
         address _usdt,
         address _zeb,
         address _receiver,
         address _signer
     ) ERC721(name, symbol) Ownable(msg.sender) {
-        oracle = _oracle;
         USDT = IERC20(_usdt);
         Zeb = IERC20(_zeb);
         receiver = _receiver;

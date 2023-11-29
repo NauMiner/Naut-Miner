@@ -11,7 +11,6 @@ contract Scripts is Script {
     FakeUSDT usdt;
     FakeZeb zeb;
     Node node;
-    address oracle = address(0x01);
     address receiver = address(0x02);
     uint256 signerPri = 0xAA;
     address signer = vm.addr(signerPri);
@@ -21,7 +20,7 @@ contract Scripts is Script {
     function setUp() public {
         usdt = new FakeUSDT();
         zeb = new FakeZeb();
-        node = new Node("","",address(oracle),address(usdt), address(zeb), receiver, signer);
+        node = new Node("","",address(usdt), address(zeb), receiver, signer);
         usdt.mint(address(node), 10e20);
     }
 
@@ -55,6 +54,7 @@ contract Scripts is Script {
     function run() public {
         vm.startBroadcast(deployerPrivateKey);
         setUp();
+        console.log("node contract address:", address(node));
         mint();
         upgrade();
         vm.stopBroadcast();
