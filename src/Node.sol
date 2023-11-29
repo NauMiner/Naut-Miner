@@ -42,7 +42,6 @@ contract Node is ERC721, Ownable {
     }
 
     address public oracle;
-    bool public isPromotion;
     bool public transferable;
     uint256 public nextTokenID;
     mapping(uint256 => NodeInfo) public nodeInfo;
@@ -56,35 +55,52 @@ contract Node is ERC721, Ownable {
         _;
     }
 
-    constructor(string memory name, string memory symbol) ERC721(name, symbol) Ownable(msg.sender) {}
+    constructor(
+        string memory name,
+        string memory symbol,
+        address _oracle,
+        address _usdt,
+        address _zeb,
+        address _receiver,
+        address _signer
+    ) ERC721(name, symbol) Ownable(msg.sender) {
+        oracle = _oracle;
+        USDT = IERC20(_usdt);
+        Zeb = IERC20(_zeb);
+        receiver = _receiver;
+        signer = _signer;
+    }
 
     function publicMint(
         MachaineType[] memory _machineType,
         uint256[] memory amount,
         address inviter,
+        uint256 discount,
         bytes memory evidence
     ) public {
         for (uint256 i = 0; i < _machineType.length; i++) {
-            mint(_machineType[i], amount[i], inviter, evidence);
+            mint(_machineType[i], amount[i], inviter, discount, evidence);
         }
     }
 
-    function mint(MachaineType _machaineType, uint256 amount, address inviter, bytes memory evidence) internal {
+    function mint(MachaineType _machaineType, uint256 amount, address inviter, uint256 discount, bytes memory evidence)
+        internal
+    {
         uint256 totalToken;
-        require(_validate(keccak256(abi.encode(inviter)), evidence, signer), "invalid evidence");
+        require(_validate(keccak256(abi.encode(inviter, discount)), evidence, signer), "invalid evidence");
         if (_machaineType == MachaineType.Regular) {
-            USDT.transfer(receiver, 500 * 10e18 * amount * 95 / 100);
-            USDT.transfer(inviter, 500 * 10e18 * amount * 5 / 100);
+            USDT.transfer(receiver, 500 * 10e18 * amount * 95 * discount / 1e4);
+            USDT.transfer(inviter, 500 * 10e18 * amount * 5 * discount / 1e4);
             totalToken = 1200;
         }
         if (_machaineType == MachaineType.Enhenced) {
-            USDT.transfer(receiver, 800 * 10e18 * amount * 95 / 100);
-            USDT.transfer(inviter, 800 * 10e18 * amount * 5 / 100);
+            USDT.transfer(receiver, 800 * 10e18 * amount * 95 * discount / 1e4);
+            USDT.transfer(inviter, 800 * 10e18 * amount * 5 * discount / 1e4);
             totalToken = 2000;
         }
         if (_machaineType == MachaineType.Finest) {
-            USDT.transfer(receiver, 1200 * 10e18 * amount * 95 / 100);
-            USDT.transfer(inviter, 1200 * 10e18 * amount * 5 / 100);
+            USDT.transfer(receiver, 1200 * 10e18 * amount * 95 * discount / 1e4);
+            USDT.transfer(inviter, 1200 * 10e18 * amount * 5 * discount / 1e4);
             totalToken = 3200;
         }
         for (uint256 i = 0; i < amount; i++) {
@@ -318,10 +334,6 @@ contract Node is ERC721, Ownable {
 
     function transferFrom(address from, address to, uint256 tokenId) public override onlyTransferable {
         super.transferFrom(from, to, tokenId);
-    }
-
-    function setPromotion(bool _isPromotion) public onlyOwner {
-        isPromotion = _isPromotion;
     }
 
     function tokenURI(uint256 tokenID) public view override returns (string memory) {}
