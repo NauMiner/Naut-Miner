@@ -9,7 +9,7 @@ import "../lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
 contract Node is ERC721, Ownable {
     using SafeERC20 for IERC20;
 
-    enum MachaineType {
+    enum MachineType {
         Regular,
         Enhenced,
         Finest
@@ -32,10 +32,10 @@ contract Node is ERC721, Ownable {
         uint256 indexed tokenId, EquipmentType equipmentType, EquipmentLevel equipmentLevel, uint256 time
     );
 
-    event mintEvent(uint256 indexed tokenId, address user, uint256 amount, address inviter, MachaineType _machaineType);
+    event mintEvent(uint256 indexed tokenId,address user, uint256 amount, address inviter, MachineType _MachineType);
 
     struct NodeInfo {
-        MachaineType machaineType;
+        MachineType MachineType;
         EquipmentType[] equipmentType;
         mapping(EquipmentType => EquipmentLevel) equipmentLevel;
         uint256 mintTime;
@@ -71,7 +71,7 @@ contract Node is ERC721, Ownable {
     }
 
     function publicMint(
-        MachaineType[] memory _machineType,
+        MachineType[] memory _machineType,
         uint256[] memory amount,
         address inviter,
         uint256 discount,
@@ -82,22 +82,22 @@ contract Node is ERC721, Ownable {
         }
     }
 
-    function mint(MachaineType _machaineType, uint256 amount, address inviter, uint256 discount, bytes memory evidence)
+    function mint(MachineType _MachineType, uint256 amount, address inviter, uint256 discount, bytes memory evidence)
         internal
     {
         uint256 totalToken;
         require(_validate(keccak256(abi.encode(inviter, discount)), evidence, signer), "invalid evidence");
-        if (_machaineType == MachaineType.Regular) {
+        if (_MachineType == MachineType.Regular) {
             USDT.transfer(receiver, 500 * 10e18 * amount * 95 * discount / 1e4);
             USDT.transfer(inviter, 500 * 10e18 * amount * 5 * discount / 1e4);
             totalToken = 1200;
         }
-        if (_machaineType == MachaineType.Enhenced) {
+        if (_MachineType == MachineType.Enhenced) {
             USDT.transfer(receiver, 800 * 10e18 * amount * 95 * discount / 1e4);
             USDT.transfer(inviter, 800 * 10e18 * amount * 5 * discount / 1e4);
             totalToken = 2000;
         }
-        if (_machaineType == MachaineType.Finest) {
+        if (_MachineType == MachineType.Finest) {
             USDT.transfer(receiver, 1200 * 10e18 * amount * 95 * discount / 1e4);
             USDT.transfer(inviter, 1200 * 10e18 * amount * 5 * discount / 1e4);
             totalToken = 3200;
@@ -106,11 +106,11 @@ contract Node is ERC721, Ownable {
             uint256 tokenId = nextTokenID;
             nextTokenID++;
             _mint(msg.sender, tokenId);
-            nodeInfo[tokenId].machaineType = _machaineType;
+            nodeInfo[tokenId].MachineType = _MachineType;
             nodeInfo[tokenId].mintTime = block.timestamp;
             nodeInfo[tokenId].unlockPeriod = 1440 days;
             nodeInfo[tokenId].totalToken = totalToken;
-            emit mintEvent(tokenId, msg.sender, amount, inviter, _machaineType);
+            emit mintEvent(tokenId, msg.sender, amount, inviter, _MachineType);
         }
     }
 
@@ -125,8 +125,8 @@ contract Node is ERC721, Ownable {
         require(_validate(keccak256(abi.encode(zebPrice)), evidence, signer), "invalid evidence");
         require(ownerOf(tokenId) == msg.sender, "NFT: not owner");
         require(nodeInfo[tokenId].equipmentLevel[_equipmentType] < _equipmentLevel, "NFT: not upgradeable");
-        MachaineType _machaineType = nodeInfo[tokenId].machaineType;
-        if (_machaineType == MachaineType.Regular) {
+        MachineType _MachineType = nodeInfo[tokenId].MachineType;
+        if (_MachineType == MachineType.Regular) {
             if (_equipmentType == EquipmentType.Pipe) {
                 EquipmentLevel _currentLevel = nodeInfo[tokenId].equipmentLevel[_equipmentType];
                 upgradeLevel(
@@ -143,7 +143,7 @@ contract Node is ERC721, Ownable {
                     zebPrice, isUSDT, tokenId, _currentLevel, _equipmentType, _equipmentLevel, 114, 152, 183, 45, 81, 36
                 );
             }
-        } else if (_machaineType == MachaineType.Enhenced) {
+        } else if (_MachineType == MachineType.Enhenced) {
             if (_equipmentType == EquipmentType.Pipe) {
                 EquipmentLevel _currentLevel = nodeInfo[tokenId].equipmentLevel[_equipmentType];
                 upgradeLevel(
@@ -182,7 +182,7 @@ contract Node is ERC721, Ownable {
                     120
                 );
             }
-        } else if (_machaineType == MachaineType.Finest) {
+        } else if (_MachineType == MachineType.Finest) {
             if (_equipmentType == EquipmentType.Pipe) {
                 EquipmentLevel _currentLevel = nodeInfo[tokenId].equipmentLevel[_equipmentType];
                 upgradeLevel(

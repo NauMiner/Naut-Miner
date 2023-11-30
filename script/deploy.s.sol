@@ -31,8 +31,8 @@ contract Scripts is Script {
         (uint8 v, bytes32 r, bytes32 s) = vm.sign(signerPri, hash);
         v = v - 27;
         bytes memory signature = abi.encodePacked(r, s, v);
-        Node.MachaineType[] memory machaineTypes = new Node.MachaineType[](1);
-        machaineTypes[0] = Node.MachaineType.Regular;
+        Node.MachineType[] memory machaineTypes = new Node.MachineType[](1);
+        machaineTypes[0] = Node.MachineType.Regular;
         uint256[] memory amounts = new uint256[](1);
         amounts[0] = 1;
         node.publicMint(machaineTypes, amounts, inviter, discount, signature);
