@@ -44,11 +44,12 @@ contract Scripts is Script {
         Node.EquipmentType equipmentType = Node.EquipmentType.Pipe;
         Node.EquipmentLevel equipmentLevel = Node.EquipmentLevel.Gold;
         uint256 zebPrice = 10;
-        bytes32 hash = keccak256(abi.encode(zebPrice));
+        address inviter = address(0x4);
+        bytes32 hash = keccak256(abi.encode(zebPrice, inviter));
         (uint8 v, bytes32 r, bytes32 s) = vm.sign(signerPri, hash);
         v = v - 27;
         bytes memory signature = abi.encodePacked(r, s, v);
-        node.upgrade(isUSDT, tokenId, equipmentType, equipmentLevel, zebPrice, signature);
+        node.upgrade(isUSDT, tokenId, equipmentType, equipmentLevel, inviter, zebPrice, signature);
     }
 
     function run() public {
