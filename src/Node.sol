@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 
-import "../lib/openzeppelin-contracts/contracts/token/ERC721/ERC721.sol";
+import "../lib/openzeppelin-contracts/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "../lib/openzeppelin-contracts/contracts/access/Ownable.sol";
 import "../lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol";
 import "../lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
 
-contract Node is ERC721, Ownable {
+contract Node is ERC721Enumerable, Ownable {
     using SafeERC20 for IERC20;
 
     enum MachineType {
@@ -29,10 +29,14 @@ contract Node is ERC721, Ownable {
     }
 
     event upgradeEvent(
-        uint256 indexed tokenId, address inviter, EquipmentType equipmentType, EquipmentLevel equipmentLevel, uint256 time
+        uint256 indexed tokenId,
+        address inviter,
+        EquipmentType equipmentType,
+        EquipmentLevel equipmentLevel,
+        uint256 time
     );
 
-    event mintEvent(uint256 indexed tokenId,address user, uint256 amount, address inviter, MachineType _MachineType);
+    event mintEvent(uint256 indexed tokenId, address user, uint256 amount, address inviter, MachineType _MachineType);
 
     struct NodeInfo {
         MachineType MachineType;
@@ -48,7 +52,7 @@ contract Node is ERC721, Ownable {
     mapping(uint256 => NodeInfo) public nodeInfo;
     IERC20 public USDT;
     IERC20 public Zeb;
-    address public receiver;
+    address public fund;
     address public signer;
 
     modifier onlyTransferable() {
@@ -56,17 +60,13 @@ contract Node is ERC721, Ownable {
         _;
     }
 
-    constructor(
-        string memory name,
-        string memory symbol,
-        address _usdt,
-        address _zeb,
-        address _receiver,
-        address _signer
-    ) ERC721(name, symbol) Ownable(msg.sender) {
+    constructor(string memory name, string memory symbol, address _usdt, address _zeb, address _fund, address _signer)
+        ERC721(name, symbol)
+        Ownable(msg.sender)
+    {
         USDT = IERC20(_usdt);
         Zeb = IERC20(_zeb);
-        receiver = _receiver;
+        fund = _fund;
         signer = _signer;
     }
 
@@ -88,17 +88,17 @@ contract Node is ERC721, Ownable {
         uint256 totalToken;
         require(_validate(keccak256(abi.encode(inviter, discount)), evidence, signer), "invalid evidence");
         if (_MachineType == MachineType.Regular) {
-            USDT.transfer(receiver, 500 * 10e18 * amount * 95 * discount / 1e4);
+            USDT.transfer(fund, 500 * 10e18 * amount * 95 * discount / 1e4);
             USDT.transfer(inviter, 500 * 10e18 * amount * 5 * discount / 1e4);
             totalToken = 1200;
         }
         if (_MachineType == MachineType.Enhenced) {
-            USDT.transfer(receiver, 800 * 10e18 * amount * 95 * discount / 1e4);
+            USDT.transfer(fund, 800 * 10e18 * amount * 95 * discount / 1e4);
             USDT.transfer(inviter, 800 * 10e18 * amount * 5 * discount / 1e4);
             totalToken = 2000;
         }
         if (_MachineType == MachineType.Finest) {
-            USDT.transfer(receiver, 1200 * 10e18 * amount * 95 * discount / 1e4);
+            USDT.transfer(fund, 1200 * 10e18 * amount * 95 * discount / 1e4);
             USDT.transfer(inviter, 1200 * 10e18 * amount * 5 * discount / 1e4);
             totalToken = 3200;
         }
@@ -131,29 +131,77 @@ contract Node is ERC721, Ownable {
             if (_equipmentType == EquipmentType.Pipe) {
                 EquipmentLevel _currentLevel = nodeInfo[tokenId].equipmentLevel[_equipmentType];
                 upgradeLevel(
-                    inviter, zebPrice, isUSDT, tokenId, _currentLevel, _equipmentType, _equipmentLevel, 31, 41, 50, 12, 21, 10
+                    inviter,
+                    zebPrice,
+                    isUSDT,
+                    tokenId,
+                    _currentLevel,
+                    _equipmentType,
+                    _equipmentLevel,
+                    31,
+                    41,
+                    50,
+                    12,
+                    21,
+                    10
                 );
             } else if (_equipmentType == EquipmentType.Gear) {
                 EquipmentLevel _currentLevel = nodeInfo[tokenId].equipmentLevel[_equipmentType];
                 upgradeLevel(
-                    inviter, zebPrice, isUSDT, tokenId, _currentLevel, _equipmentType, _equipmentLevel, 68, 91, 110, 27, 49, 22
+                    inviter,
+                    zebPrice,
+                    isUSDT,
+                    tokenId,
+                    _currentLevel,
+                    _equipmentType,
+                    _equipmentLevel,
+                    68,
+                    91,
+                    110,
+                    27,
+                    49,
+                    22
                 );
             } else if (_equipmentType == EquipmentType.Grill) {
                 EquipmentLevel _currentLevel = nodeInfo[tokenId].equipmentLevel[_equipmentType];
                 upgradeLevel(
-                    inviter, zebPrice, isUSDT, tokenId, _currentLevel, _equipmentType, _equipmentLevel, 114, 152, 183, 45, 81, 36
+                    inviter,
+                    zebPrice,
+                    isUSDT,
+                    tokenId,
+                    _currentLevel,
+                    _equipmentType,
+                    _equipmentLevel,
+                    114,
+                    152,
+                    183,
+                    45,
+                    81,
+                    36
                 );
             }
         } else if (_MachineType == MachineType.Enhenced) {
             if (_equipmentType == EquipmentType.Pipe) {
                 EquipmentLevel _currentLevel = nodeInfo[tokenId].equipmentLevel[_equipmentType];
                 upgradeLevel(
-                    inviter, zebPrice, isUSDT, tokenId, _currentLevel, _equipmentType, _equipmentLevel, 102, 136, 163, 40, 72, 32
+                    inviter,
+                    zebPrice,
+                    isUSDT,
+                    tokenId,
+                    _currentLevel,
+                    _equipmentType,
+                    _equipmentLevel,
+                    102,
+                    136,
+                    163,
+                    40,
+                    72,
+                    32
                 );
             } else if (_equipmentType == EquipmentType.Gear) {
                 EquipmentLevel _currentLevel = nodeInfo[tokenId].equipmentLevel[_equipmentType];
                 upgradeLevel(
-                    inviter, 
+                    inviter,
                     zebPrice,
                     isUSDT,
                     tokenId,
@@ -170,7 +218,7 @@ contract Node is ERC721, Ownable {
             } else if (_equipmentType == EquipmentType.Grill) {
                 EquipmentLevel _currentLevel = nodeInfo[tokenId].equipmentLevel[_equipmentType];
                 upgradeLevel(
-                    inviter, 
+                    inviter,
                     zebPrice,
                     isUSDT,
                     tokenId,
@@ -189,7 +237,7 @@ contract Node is ERC721, Ownable {
             if (_equipmentType == EquipmentType.Pipe) {
                 EquipmentLevel _currentLevel = nodeInfo[tokenId].equipmentLevel[_equipmentType];
                 upgradeLevel(
-                    inviter, 
+                    inviter,
                     zebPrice,
                     isUSDT,
                     tokenId,
@@ -206,7 +254,7 @@ contract Node is ERC721, Ownable {
             } else if (_equipmentType == EquipmentType.Gear) {
                 EquipmentLevel _currentLevel = nodeInfo[tokenId].equipmentLevel[_equipmentType];
                 upgradeLevel(
-                    inviter, 
+                    inviter,
                     zebPrice,
                     isUSDT,
                     tokenId,
@@ -223,7 +271,7 @@ contract Node is ERC721, Ownable {
             } else if (_equipmentType == EquipmentType.Grill) {
                 EquipmentLevel _currentLevel = nodeInfo[tokenId].equipmentLevel[_equipmentType];
                 upgradeLevel(
-                    inviter, 
+                    inviter,
                     zebPrice,
                     isUSDT,
                     tokenId,
@@ -285,31 +333,31 @@ contract Node is ERC721, Ownable {
         if (_currentLevel == EquipmentLevel.Base) {
             if (_equipmentLevel == EquipmentLevel.Gold) {
                 if (isUSDT) {
-                    USDT.transfer(receiver, _baseToGold * 95 * 10e16);
+                    USDT.transfer(fund, _baseToGold * 95 * 10e16);
                     USDT.transfer(inviter, _baseToGold * 5 * 10e16);
                 } else {
-                    Zeb.transfer(receiver, _baseToGold / ZebPrice * 95 * 10e16);
-                    Zeb.transfer(inviter, _baseToGold / ZebPrice * 5 * 10e16);
+                    Zeb.transfer(fund, _baseToGold * 95 * 10e16 / ZebPrice);
+                    Zeb.transfer(inviter, _baseToGold * 5 * 10e16 / ZebPrice);
                 }
                 nodeInfo[tokenId].equipmentLevel[_equipmentType] = EquipmentLevel.Gold;
             }
             if (_equipmentLevel == EquipmentLevel.Platinum) {
                 if (isUSDT) {
-                    USDT.transfer(receiver, _baseToPlatinum * 95 * 10e16);
+                    USDT.transfer(fund, _baseToPlatinum * 95 * 10e16);
                     USDT.transfer(inviter, _baseToPlatinum * 5 * 10e16);
                 } else {
-                    Zeb.transfer(receiver, _baseToPlatinum / ZebPrice * 95 * 10e16);
-                    Zeb.transfer(inviter, _baseToPlatinum / ZebPrice * 5 * 10e16);
+                    Zeb.transfer(fund, _baseToPlatinum * 95 * 10e16 / ZebPrice);
+                    Zeb.transfer(inviter, _baseToPlatinum * 5 * 10e16 / ZebPrice);
                 }
                 nodeInfo[tokenId].equipmentLevel[_equipmentType] = EquipmentLevel.Platinum;
             }
             if (_equipmentLevel == EquipmentLevel.Diamond) {
                 if (isUSDT) {
-                    USDT.transfer(receiver, _baseToDiamond * 95 * 10e16);
+                    USDT.transfer(fund, _baseToDiamond * 95 * 10e16);
                     USDT.transfer(inviter, _baseToDiamond * 5 * 10e16);
                 } else {
-                    Zeb.transfer(receiver, _baseToDiamond / ZebPrice * 95 * 10e16);
-                    Zeb.transfer(inviter, _baseToDiamond / ZebPrice * 5 * 10e16);
+                    Zeb.transfer(fund, _baseToDiamond * 95 * 10e16 / ZebPrice);
+                    Zeb.transfer(inviter, _baseToDiamond * 5 * 10e16 / ZebPrice);
                 }
                 nodeInfo[tokenId].equipmentLevel[_equipmentType] = EquipmentLevel.Diamond;
             }
@@ -317,21 +365,21 @@ contract Node is ERC721, Ownable {
         if (_currentLevel == EquipmentLevel.Gold) {
             if (_equipmentLevel == EquipmentLevel.Platinum) {
                 if (isUSDT) {
-                    USDT.transfer(receiver, _goldToPlatinum * 95 * 10e16);
+                    USDT.transfer(fund, _goldToPlatinum * 95 * 10e16);
                     USDT.transfer(inviter, _goldToPlatinum * 5 * 10e16);
                 } else {
-                    Zeb.transfer(receiver, _goldToPlatinum / ZebPrice * 95 * 10e16);
-                    Zeb.transfer(inviter, _goldToPlatinum / ZebPrice * 5 * 10e16);
+                    Zeb.transfer(fund, _goldToPlatinum * 95 * 10e16 / ZebPrice);
+                    Zeb.transfer(inviter, _goldToPlatinum * 5 * 10e16 / ZebPrice);
                 }
                 nodeInfo[tokenId].equipmentLevel[_equipmentType] = EquipmentLevel.Platinum;
             }
             if (_equipmentLevel == EquipmentLevel.Diamond) {
                 if (isUSDT) {
-                    USDT.transfer(receiver, _goldToDiamond * 95 * 10e16);
+                    USDT.transfer(fund, _goldToDiamond * 95 * 10e16);
                     USDT.transfer(inviter, _goldToDiamond * 5 * 10e16);
                 } else {
-                    Zeb.transfer(receiver, _goldToDiamond / ZebPrice * 95 * 10e16);
-                    Zeb.transfer(inviter, _goldToDiamond / ZebPrice * 5 * 10e16);
+                    Zeb.transfer(fund, _goldToDiamond * 95 * 10e16 / ZebPrice);
+                    Zeb.transfer(inviter, _goldToDiamond * 5 * 10e16 / ZebPrice);
                 }
                 nodeInfo[tokenId].equipmentLevel[_equipmentType] = EquipmentLevel.Diamond;
             }
@@ -339,20 +387,20 @@ contract Node is ERC721, Ownable {
         if (_currentLevel == EquipmentLevel.Platinum) {
             if (_equipmentLevel == EquipmentLevel.Diamond) {
                 if (isUSDT) {
-                    USDT.transfer(receiver, _platinumToDiamond * 95 * 10e16);
+                    USDT.transfer(fund, _platinumToDiamond * 95 * 10e16);
                     USDT.transfer(inviter, _platinumToDiamond * 5 * 10e16);
                 } else {
-                    Zeb.transfer(receiver, _platinumToDiamond / ZebPrice * 95 * 10e16);
-                    Zeb.transfer(inviter, _platinumToDiamond / ZebPrice * 5 * 10e16);
+                    Zeb.transfer(fund, _platinumToDiamond * 95 * 10e16 / ZebPrice);
+                    Zeb.transfer(inviter, _platinumToDiamond * 5 * 10e16 / ZebPrice);
                 }
                 nodeInfo[tokenId].equipmentLevel[_equipmentType] = EquipmentLevel.Diamond;
             }
         }
     }
 
-    function transferFrom(address from, address to, uint256 tokenId) public override onlyTransferable {
-        super.transferFrom(from, to, tokenId);
-    }
+    // function transferFrom(address from, address to, uint256 tokenId) public override onlyTransferable {
+    //     super.transferFrom(from, to, tokenId);
+    // }
 
     function tokenURI(uint256 tokenID) public view override returns (string memory) {}
 
