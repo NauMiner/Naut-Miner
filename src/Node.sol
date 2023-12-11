@@ -70,8 +70,12 @@ contract Node is ERC721Enumerable, Ownable {
         signer = _signer;
     }
 
-    function getEquipmentLevel(uint256 tokenId, EquipmentType _equipmentType) public view returns(EquipmentLevel) {
-        return nodeInfo[tokenId].equipmentLevel[_equipmentType];
+    function getEquipmentLevel(uint256 tokenId) public view returns(EquipmentLevel[] memory) {
+        EquipmentLevel[] memory _equipmentLevel = new EquipmentLevel[](3);
+        _equipmentLevel[0] = nodeInfo[tokenId].equipmentLevel[EquipmentType.Pipe];
+        _equipmentLevel[1] = nodeInfo[tokenId].equipmentLevel[EquipmentType.Gear];
+        _equipmentLevel[2] = nodeInfo[tokenId].equipmentLevel[EquipmentType.Grill];
+        return _equipmentLevel;
     }
 
     function publicMint(
