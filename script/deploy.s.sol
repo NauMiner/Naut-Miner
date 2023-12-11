@@ -57,6 +57,8 @@ contract Scripts is Script {
         vm.startBroadcast(deployerPrivateKey);
         setUp();
         console.log("node contract address:", address(node));
+        console.log("usdt address:", address(usdt));
+        console.log("zeb address:", address(zeb));
         mint();
         upgrade();
         vm.stopBroadcast();
