@@ -114,6 +114,20 @@ contract Node is ERC721Enumerable, Ownable {
         }
     }
 
+    function multipleUpgrade(
+        bool isUSDT,
+        uint256 tokenId,
+        EquipmentType[] memory _equipmentType,
+        EquipmentLevel[] memory _equipmentLevel,
+        address inviter,
+        uint256 zebPrice,
+        bytes memory evidence
+    ) public {
+        for (uint256 i = 0; i < _equipmentType.length; i++) {
+            upgrade(isUSDT, tokenId, _equipmentType[i], _equipmentLevel[i], inviter, zebPrice, evidence);
+        }
+    }
+
     function upgrade(
         bool isUSDT,
         uint256 tokenId,
