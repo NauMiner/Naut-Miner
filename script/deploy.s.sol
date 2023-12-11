@@ -21,13 +21,16 @@ contract Scripts is Script {
         usdt = new FakeUSDT();
         zeb = new FakeZeb();
         node = new Node("","",address(usdt), address(zeb), receiver, signer);
-        usdt.mint(address(node), 10e20);
+        usdt.mint(address(this), 10e20);
+        usdt.mint(deployer, 10e20);
     }
 
     function mint() public {
         address inviter = address(0x4);
         uint256 discount = 1;
-        bytes32 hash = keccak256(abi.encode(inviter, discount));
+        uint256 time = block.timestamp;
+        address user = deployer;
+        bytes32 hash = keccak256(abi.encode(inviter, discount, time, user));
         (uint8 v, bytes32 r, bytes32 s) = vm.sign(signerPri, hash);
         v = v - 27;
         bytes memory signature = abi.encodePacked(r, s, v);
@@ -36,21 +39,24 @@ contract Scripts is Script {
         machaineTypes[0] = Node.MachineType.Regular;
         uint256[] memory amounts = new uint256[](1);
         amounts[0] = 1;
-        node.publicMint(machaineTypes, amounts, inviter, discount, signature);
+        usdt.approve(address(node), 10e50);
+        node.publicMint(machaineTypes, amounts, inviter, discount, time, user, signature);
     }
 
     function upgrade() public {
         bool isUSDT = true;
         uint256 tokenId = 0;
+        uint256 time = block.timestamp;
+        address user = deployer;
         Node.EquipmentType equipmentType = Node.EquipmentType.Pipe;
         Node.EquipmentLevel equipmentLevel = Node.EquipmentLevel.Gold;
         uint256 zebPrice = 10;
         address inviter = address(0x4);
-        bytes32 hash = keccak256(abi.encode(zebPrice, inviter));
+        bytes32 hash = keccak256(abi.encode(zebPrice, inviter, time, user));
         (uint8 v, bytes32 r, bytes32 s) = vm.sign(signerPri, hash);
         v = v - 27;
         bytes memory signature = abi.encodePacked(r, s, v);
-        node.upgrade(isUSDT, tokenId, equipmentType, equipmentLevel, inviter, zebPrice, signature);
+        node.upgrade(isUSDT, tokenId, equipmentType, equipmentLevel, inviter, zebPrice, time, user, signature);
     }
 
     function run() public {

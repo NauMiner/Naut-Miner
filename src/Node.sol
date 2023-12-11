@@ -83,31 +83,35 @@ contract Node is ERC721Enumerable, Ownable {
         uint256[] memory amount,
         address inviter,
         uint256 discount,
+        uint256 time,
+        address user,
         bytes memory evidence
     ) public {
         for (uint256 i = 0; i < _machineType.length; i++) {
-            mint(_machineType[i], amount[i], inviter, discount, evidence);
+            mint(_machineType[i], amount[i], inviter, discount, time, user, evidence);
         }
     }
 
-    function mint(MachineType _MachineType, uint256 amount, address inviter, uint256 discount, bytes memory evidence)
+    function mint(MachineType _MachineType, uint256 amount, address inviter, uint256 discount, uint256 time, address user, bytes memory evidence)
         internal
-    {
+    {   
+        require(time + 5 minutes > block.timestamp, "evidence expired");
+        require(user == msg.sender, "invalid user");
         uint256 totalToken;
-        require(_validate(keccak256(abi.encode(inviter, discount)), evidence, signer), "invalid evidence");
+        require(_validate(keccak256(abi.encode(inviter, discount, time, user)), evidence, signer), "invalid evidence");
         if (_MachineType == MachineType.Regular) {
-            USDT.transfer(fund, 500 * 10e18 * amount * 95 * discount / 1e4);
-            USDT.transfer(inviter, 500 * 10e18 * amount * 5 * discount / 1e4);
+            USDT.transferFrom(msg.sender, fund, 500 * 10e18 * amount * 95 * discount / 1e4);
+            USDT.transferFrom(msg.sender, inviter, 500 * 10e18 * amount * 5 * discount / 1e4);
             totalToken = 1200;
         }
         if (_MachineType == MachineType.Enhenced) {
-            USDT.transfer(fund, 800 * 10e18 * amount * 95 * discount / 1e4);
-            USDT.transfer(inviter, 800 * 10e18 * amount * 5 * discount / 1e4);
+            USDT.transferFrom(msg.sender, fund, 800 * 10e18 * amount * 95 * discount / 1e4);
+            USDT.transferFrom(msg.sender, inviter, 800 * 10e18 * amount * 5 * discount / 1e4);
             totalToken = 2000;
         }
         if (_MachineType == MachineType.Finest) {
-            USDT.transfer(fund, 1200 * 10e18 * amount * 95 * discount / 1e4);
-            USDT.transfer(inviter, 1200 * 10e18 * amount * 5 * discount / 1e4);
+            USDT.transferFrom(msg.sender, fund, 1200 * 10e18 * amount * 95 * discount / 1e4);
+            USDT.transferFrom(msg.sender, inviter, 1200 * 10e18 * amount * 5 * discount / 1e4);
             totalToken = 3200;
         }
         for (uint256 i = 0; i < amount; i++) {
@@ -129,10 +133,12 @@ contract Node is ERC721Enumerable, Ownable {
         EquipmentLevel[] memory _equipmentLevel,
         address inviter,
         uint256 zebPrice,
+        uint256 time,
+        address user,
         bytes memory evidence
     ) public {
         for (uint256 i = 0; i < _equipmentType.length; i++) {
-            upgrade(isUSDT, tokenId, _equipmentType[i], _equipmentLevel[i], inviter, zebPrice, evidence);
+            upgrade(isUSDT, tokenId, _equipmentType[i], _equipmentLevel[i], inviter, zebPrice, time, user, evidence);
         }
     }
 
@@ -143,9 +149,13 @@ contract Node is ERC721Enumerable, Ownable {
         EquipmentLevel _equipmentLevel,
         address inviter,
         uint256 zebPrice,
+        uint256 time,
+        address user,
         bytes memory evidence
     ) public {
-        require(_validate(keccak256(abi.encode(zebPrice, inviter)), evidence, signer), "invalid evidence");
+        require(time + 5 minutes > block.timestamp, "evidence expired");
+        require(user == msg.sender, "invalid user");
+        require(_validate(keccak256(abi.encode(zebPrice, inviter, time, user)), evidence, signer), "invalid evidence");
         require(ownerOf(tokenId) == msg.sender, "NFT: not owner");
         require(nodeInfo[tokenId].equipmentLevel[_equipmentType] < _equipmentLevel, "NFT: not upgradeable");
         MachineType _MachineType = nodeInfo[tokenId].MachineType;
@@ -355,31 +365,31 @@ contract Node is ERC721Enumerable, Ownable {
         if (_currentLevel == EquipmentLevel.Base) {
             if (_equipmentLevel == EquipmentLevel.Gold) {
                 if (isUSDT) {
-                    USDT.transfer(fund, _baseToGold * 95 * 10e16);
-                    USDT.transfer(inviter, _baseToGold * 5 * 10e16);
+                    USDT.transferFrom(msg.sender, fund, _baseToGold * 95 * 10e16);
+                    USDT.transferFrom(msg.sender, inviter, _baseToGold * 5 * 10e16);
                 } else {
-                    Zeb.transfer(fund, _baseToGold * 95 * 10e16 / ZebPrice);
-                    Zeb.transfer(inviter, _baseToGold * 5 * 10e16 / ZebPrice);
+                    Zeb.transferFrom(msg.sender, fund, _baseToGold * 95 * 10e7 / ZebPrice);
+                    Zeb.transferFrom(msg.sender, inviter, _baseToGold * 5 * 10e7 / ZebPrice);
                 }
                 nodeInfo[tokenId].equipmentLevel[_equipmentType] = EquipmentLevel.Gold;
             }
             if (_equipmentLevel == EquipmentLevel.Platinum) {
                 if (isUSDT) {
-                    USDT.transfer(fund, _baseToPlatinum * 95 * 10e16);
-                    USDT.transfer(inviter, _baseToPlatinum * 5 * 10e16);
+                    USDT.transferFrom(msg.sender, fund, _baseToPlatinum * 95 * 10e16);
+                    USDT.transferFrom(msg.sender, inviter, _baseToPlatinum * 5 * 10e16);
                 } else {
-                    Zeb.transfer(fund, _baseToPlatinum * 95 * 10e16 / ZebPrice);
-                    Zeb.transfer(inviter, _baseToPlatinum * 5 * 10e16 / ZebPrice);
+                    Zeb.transferFrom(msg.sender, fund, _baseToPlatinum * 95 * 10e7 / ZebPrice);
+                    Zeb.transferFrom(msg.sender, inviter, _baseToPlatinum * 5 * 10e7 / ZebPrice);
                 }
                 nodeInfo[tokenId].equipmentLevel[_equipmentType] = EquipmentLevel.Platinum;
             }
             if (_equipmentLevel == EquipmentLevel.Diamond) {
                 if (isUSDT) {
-                    USDT.transfer(fund, _baseToDiamond * 95 * 10e16);
-                    USDT.transfer(inviter, _baseToDiamond * 5 * 10e16);
+                    USDT.transferFrom(msg.sender, fund, _baseToDiamond * 95 * 10e16);
+                    USDT.transferFrom(msg.sender, inviter, _baseToDiamond * 5 * 10e16);
                 } else {
-                    Zeb.transfer(fund, _baseToDiamond * 95 * 10e16 / ZebPrice);
-                    Zeb.transfer(inviter, _baseToDiamond * 5 * 10e16 / ZebPrice);
+                    Zeb.transferFrom(msg.sender, fund, _baseToDiamond * 95 * 10e7 / ZebPrice);
+                    Zeb.transferFrom(msg.sender, inviter, _baseToDiamond * 5 * 10e7 / ZebPrice);
                 }
                 nodeInfo[tokenId].equipmentLevel[_equipmentType] = EquipmentLevel.Diamond;
             }
@@ -387,21 +397,21 @@ contract Node is ERC721Enumerable, Ownable {
         if (_currentLevel == EquipmentLevel.Gold) {
             if (_equipmentLevel == EquipmentLevel.Platinum) {
                 if (isUSDT) {
-                    USDT.transfer(fund, _goldToPlatinum * 95 * 10e16);
-                    USDT.transfer(inviter, _goldToPlatinum * 5 * 10e16);
+                    USDT.transferFrom(msg.sender, fund, _goldToPlatinum * 95 * 10e16);
+                    USDT.transferFrom(msg.sender, inviter, _goldToPlatinum * 5 * 10e16);
                 } else {
-                    Zeb.transfer(fund, _goldToPlatinum * 95 * 10e16 / ZebPrice);
-                    Zeb.transfer(inviter, _goldToPlatinum * 5 * 10e16 / ZebPrice);
+                    Zeb.transferFrom(msg.sender, fund, _goldToPlatinum * 95 * 10e7 / ZebPrice);
+                    Zeb.transferFrom(msg.sender, inviter, _goldToPlatinum * 5 * 10e7 / ZebPrice);
                 }
                 nodeInfo[tokenId].equipmentLevel[_equipmentType] = EquipmentLevel.Platinum;
             }
             if (_equipmentLevel == EquipmentLevel.Diamond) {
                 if (isUSDT) {
-                    USDT.transfer(fund, _goldToDiamond * 95 * 10e16);
-                    USDT.transfer(inviter, _goldToDiamond * 5 * 10e16);
+                    USDT.transferFrom(msg.sender, fund, _goldToDiamond * 95 * 10e16);
+                    USDT.transferFrom(msg.sender, inviter, _goldToDiamond * 5 * 10e16);
                 } else {
-                    Zeb.transfer(fund, _goldToDiamond * 95 * 10e16 / ZebPrice);
-                    Zeb.transfer(inviter, _goldToDiamond * 5 * 10e16 / ZebPrice);
+                    Zeb.transferFrom(msg.sender, fund, _goldToDiamond * 95 * 10e7 / ZebPrice);
+                    Zeb.transferFrom(msg.sender, inviter, _goldToDiamond * 5 * 10e7 / ZebPrice);
                 }
                 nodeInfo[tokenId].equipmentLevel[_equipmentType] = EquipmentLevel.Diamond;
             }
@@ -409,11 +419,11 @@ contract Node is ERC721Enumerable, Ownable {
         if (_currentLevel == EquipmentLevel.Platinum) {
             if (_equipmentLevel == EquipmentLevel.Diamond) {
                 if (isUSDT) {
-                    USDT.transfer(fund, _platinumToDiamond * 95 * 10e16);
-                    USDT.transfer(inviter, _platinumToDiamond * 5 * 10e16);
+                    USDT.transferFrom(msg.sender, fund, _platinumToDiamond * 95 * 10e16);
+                    USDT.transferFrom(msg.sender, inviter, _platinumToDiamond * 5 * 10e16);
                 } else {
-                    Zeb.transfer(fund, _platinumToDiamond * 95 * 10e16 / ZebPrice);
-                    Zeb.transfer(inviter, _platinumToDiamond * 5 * 10e16 / ZebPrice);
+                    Zeb.transferFrom(msg.sender, fund, _platinumToDiamond * 95 * 10e7 / ZebPrice);
+                    Zeb.transferFrom(msg.sender, inviter, _platinumToDiamond * 5 * 10e7 / ZebPrice);
                 }
                 nodeInfo[tokenId].equipmentLevel[_equipmentType] = EquipmentLevel.Diamond;
             }
