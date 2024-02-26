@@ -5,6 +5,7 @@ import "../lib/openzeppelin-contracts/contracts/token/ERC721/extensions/ERC721En
 import "../lib/openzeppelin-contracts/contracts/access/Ownable.sol";
 import "../lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol";
 import "../lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
+import "../lib/openzeppelin-contracts/contracts/token/ERC721/IERC721.sol";
 
 contract Node is ERC721Enumerable, Ownable {
     using SafeERC20 for IERC20;
@@ -54,6 +55,7 @@ contract Node is ERC721Enumerable, Ownable {
     IERC20 public Zeb;
     address public fund;
     address public signer;
+    mapping(bytes => bool) evidenceUsed;
 
     modifier onlyTransferable() {
         require(transferable, "NFT: not transferable");
@@ -70,7 +72,7 @@ contract Node is ERC721Enumerable, Ownable {
         signer = _signer;
     }
 
-    function getEquipmentLevel(uint256 tokenId) public view returns(EquipmentLevel[] memory) {
+    function getEquipmentLevel(uint256 tokenId) public view returns (EquipmentLevel[] memory) {
         EquipmentLevel[] memory _equipmentLevel = new EquipmentLevel[](3);
         _equipmentLevel[0] = nodeInfo[tokenId].equipmentLevel[EquipmentType.Pipe];
         _equipmentLevel[1] = nodeInfo[tokenId].equipmentLevel[EquipmentType.Gear];
@@ -92,13 +94,21 @@ contract Node is ERC721Enumerable, Ownable {
         }
     }
 
-    function mint(MachineType _MachineType, uint256 amount, address inviter, uint256 discount, uint256 time, address user, bytes memory evidence)
-        internal
-    {   
+    function mint(
+        MachineType _MachineType,
+        uint256 amount,
+        address inviter,
+        uint256 discount,
+        uint256 time,
+        address user,
+        bytes memory evidence
+    ) internal {
         require(time + 5 minutes > block.timestamp, "evidence expired");
+        require(!evidenceUsed[evidence], "evidence used");
         require(user == msg.sender, "invalid user");
         uint256 totalToken;
         require(_validate(keccak256(abi.encode(inviter, discount, time, user)), evidence, signer), "invalid evidence");
+        evidenceUsed[evidence] = true;
         if (_MachineType == MachineType.Regular) {
             USDT.transferFrom(msg.sender, fund, 500 * 10e18 * amount * 95 * discount / 1e4);
             USDT.transferFrom(msg.sender, inviter, 500 * 10e18 * amount * 5 * discount / 1e4);
@@ -154,11 +164,13 @@ contract Node is ERC721Enumerable, Ownable {
         bytes memory evidence
     ) public {
         require(time + 5 minutes > block.timestamp, "evidence expired");
+        require(!evidenceUsed[evidence], "evidence used");
         require(user == msg.sender, "invalid user");
         require(_validate(keccak256(abi.encode(zebPrice, inviter, time, user)), evidence, signer), "invalid evidence");
         require(ownerOf(tokenId) == msg.sender, "NFT: not owner");
         require(nodeInfo[tokenId].equipmentLevel[_equipmentType] < _equipmentLevel, "NFT: not upgradeable");
         MachineType _MachineType = nodeInfo[tokenId].MachineType;
+        evidenceUsed[evidence] = true;
         if (_MachineType == MachineType.Regular) {
             if (_equipmentType == EquipmentType.Pipe) {
                 EquipmentLevel _currentLevel = nodeInfo[tokenId].equipmentLevel[_equipmentType];
@@ -430,9 +442,9 @@ contract Node is ERC721Enumerable, Ownable {
         }
     }
 
-    // function transferFrom(address from, address to, uint256 tokenId) public override onlyTransferable {
-    //     super.transferFrom(from, to, tokenId);
-    // }
+    function transferFrom(address from, address to, uint256 tokenId) public override(ERC721, IERC721) onlyTransferable {
+        super.transferFrom(from, to, tokenId);
+    }
 
     function tokenURI(uint256 tokenID) public view override returns (string memory) {}
 

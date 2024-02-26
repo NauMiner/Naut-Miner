@@ -30,15 +30,15 @@ contract Scripts is Script {
         uint256 discount = 1;
         uint256 time = block.timestamp;
         address user = deployer;
+        Node.MachineType[] memory machaineTypes = new Node.MachineType[](1);
+        machaineTypes[0] = Node.MachineType.Regular;
+        uint256[] memory amounts = new uint256[](1);
+        amounts[0] = 1;
         bytes32 hash = keccak256(abi.encode(inviter, discount, time, user));
         (uint8 v, bytes32 r, bytes32 s) = vm.sign(signerPri, hash);
         v = v - 27;
         bytes memory signature = abi.encodePacked(r, s, v);
         console.logBytes(signature);
-        Node.MachineType[] memory machaineTypes = new Node.MachineType[](1);
-        machaineTypes[0] = Node.MachineType.Regular;
-        uint256[] memory amounts = new uint256[](1);
-        amounts[0] = 1;
         usdt.approve(address(node), 10e50);
         node.publicMint(machaineTypes, amounts, inviter, discount, time, user, signature);
     }
